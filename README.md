@@ -1,3 +1,7 @@
+# Reto Ciudadela del Futuro
+
+![Diagrama de arquitectura](docs/diagram.svg)
+
 # Proyecto Base Implementando Clean Architecture
 
 ## Antes de Iniciar
