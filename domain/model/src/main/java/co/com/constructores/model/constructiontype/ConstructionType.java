@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ConstructionType {
+    private String id;
     private String type;
     private Integer adobe;
     private Integer sand;

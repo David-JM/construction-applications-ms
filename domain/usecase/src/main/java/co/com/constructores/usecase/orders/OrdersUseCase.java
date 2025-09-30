@@ -3,16 +3,15 @@ package co.com.constructores.usecase.orders;
 import co.com.constructores.model.constructionmap.gateways.ConstructionMapRepository;
 import co.com.constructores.model.constructionmaterial.MaterialWarehouse;
 import co.com.constructores.model.constructiontype.ConstructionType;
-import co.com.constructores.model.constructiontype.gateways.ConstructionTypeRepository;
 import co.com.constructores.model.exceptions.BusinessException;
 import co.com.constructores.model.exceptions.ErrorCode;
 import co.com.constructores.model.exceptions.ErrorMessages;
 import co.com.constructores.model.order.Order;
 import co.com.constructores.model.order.gateways.OrderRepository;
 import co.com.constructores.model.solicitude.Solicitude;
+import co.com.constructores.usecase.constructiontypes.ConstructionTypesUseCase;
 import co.com.constructores.usecase.materialwarehouse.MaterialWarehouseUseCase;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -20,19 +19,15 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class OrdersUseCase {
     private final MaterialWarehouseUseCase materialWarehouseUseCase;
+    private final ConstructionTypesUseCase constructionTypesUseCase;
 
-    private final ConstructionTypeRepository constructionTypeRepository;
     private final ConstructionMapRepository constructionMapRepository;
     private final OrderRepository orderRepository;
 
     private static final int ONE_DAY = 1;
 
-    public Flux<ConstructionType> getConstructionTypes() {
-        return constructionTypeRepository.getAll();
-    }
-
     public Mono<Order> addConstructionOrder(Solicitude solicitude) {
-        var constructionTypeMono = getConstructionTypes().filter(res -> res.getType().equals(solicitude.getConstructionType())).next();
+        var constructionTypeMono = constructionTypesUseCase.getConstructionTypes().filter(res -> res.getType().equals(solicitude.getConstructionType())).next();
 
         return constructionTypeMono.flatMap(constructionType -> materialWarehouseUseCase.getMaterials()
                 .flatMap(material -> validateAvailableMaterials(material, constructionType)

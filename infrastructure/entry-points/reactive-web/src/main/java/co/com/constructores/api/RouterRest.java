@@ -14,6 +14,7 @@ public class RouterRest {
     @Bean
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(POST("/api/orders"), handler::listenPOSTOrdersUseCase)
+                .andRoute(GET("/api/construction-types"), handler::listenGETConstructionTypesUseCase)
                 .andRoute(GET("/api/reports/project-end"), handler::listenGETReportUseCaseProjectEnd)
                 .andRoute(GET("/api/reports/orders-state"), handler::listenGETReportUseCaseOrdersState);
     }
