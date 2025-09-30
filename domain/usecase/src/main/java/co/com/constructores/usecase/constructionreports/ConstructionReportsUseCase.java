@@ -1,6 +1,7 @@
 package co.com.constructores.usecase.constructionreports;
 
 import co.com.constructores.model.order.Order;
+import co.com.constructores.model.order.OrdersReport;
 import co.com.constructores.model.order.gateways.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -15,7 +16,7 @@ public class ConstructionReportsUseCase {
         return orderRepository.getLastOrder().map(Order::getEndDate);
     }
 
-    public getStateOrders() {
-        return null;
+    public Mono<OrdersReport> getOrdersReport() {
+        return orderRepository.getStateOrders();
     }
 }

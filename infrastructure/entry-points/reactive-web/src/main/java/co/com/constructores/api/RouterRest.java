@@ -15,6 +15,6 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(POST("/api/orders"), handler::listenPOSTOrdersUseCase)
                 .andRoute(GET("/api/reports/project-end"), handler::listenGETReportUseCaseProjectEnd)
-                .andRoute(GET("/api/materials"), handler::listenGETMaterialWarehouseUseCase);
+                .andRoute(GET("/api/reports/orders-state"), handler::listenGETReportUseCaseOrdersState);
     }
 }

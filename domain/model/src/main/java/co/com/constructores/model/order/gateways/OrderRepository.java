@@ -1,13 +1,13 @@
 package co.com.constructores.model.order.gateways;
 
 import co.com.constructores.model.order.Order;
-import reactor.core.publisher.Flux;
+import co.com.constructores.model.order.OrdersReport;
 import reactor.core.publisher.Mono;
 
 public interface OrderRepository {
-    Mono<Order> getLastOrder();
-
     Mono<Order> save(Order order);
 
-    Flux<Order> getAll();
+    Mono<Order> getLastOrder();
+
+    Mono<OrdersReport> getStateOrders();
 }

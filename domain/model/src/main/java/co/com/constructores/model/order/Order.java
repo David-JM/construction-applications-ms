@@ -15,5 +15,5 @@ public class Order {
     private LocalDate endDate;
     private String constructionType;
     @Builder.Default
-    private Status status = Status.PENDIENTE;
+    private OrderStatus status = OrderStatus.PENDING;
 }

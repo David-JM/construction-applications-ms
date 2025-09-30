@@ -1,10 +1,9 @@
 package co.com.constructores.api;
 
 import co.com.constructores.api.config.ErrorHandler;
-import co.com.constructores.model.constructionmaterial.MaterialWarehouse;
+import co.com.constructores.model.order.OrdersReport;
 import co.com.constructores.model.solicitude.Solicitude;
 import co.com.constructores.usecase.constructionreports.ConstructionReportsUseCase;
-import co.com.constructores.usecase.materialwarehouse.MaterialWarehouseUseCase;
 import co.com.constructores.usecase.orders.OrdersUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class Handler {
     private final OrdersUseCase ordersUseCase;
-    private final MaterialWarehouseUseCase materialWarehouseUseCase;
     private final ConstructionReportsUseCase constructionReportsUseCase;
 
     public Mono<ServerResponse> listenPOSTOrdersUseCase(ServerRequest serverRequest) {
@@ -32,7 +30,9 @@ public class Handler {
         return ServerResponse.ok().body(constructionReportsUseCase.getProjectEndDate(), LocalDate.class);
     }
 
-    public Mono<ServerResponse> listenGETMaterialWarehouseUseCase(ServerRequest serverRequest) {
-        return ServerResponse.ok().body(materialWarehouseUseCase.getMaterials(), MaterialWarehouse.class);
+    public Mono<ServerResponse> listenGETReportUseCaseOrdersState(ServerRequest serverRequest) {
+        return constructionReportsUseCase.getOrdersReport()
+                .flatMap(ordersReport -> ServerResponse.ok().bodyValue(ordersReport))
+                .onErrorResume(ErrorHandler.businessError());
     }
 }
