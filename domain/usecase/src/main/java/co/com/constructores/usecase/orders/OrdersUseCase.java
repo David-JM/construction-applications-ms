@@ -1,6 +1,5 @@
 package co.com.constructores.usecase.orders;
 
-import co.com.constructores.model.constructionmap.gateways.ConstructionMapRepository;
 import co.com.constructores.model.constructionmaterial.MaterialWarehouse;
 import co.com.constructores.model.constructiontype.ConstructionType;
 import co.com.constructores.model.exceptions.BusinessException;
@@ -9,6 +8,7 @@ import co.com.constructores.model.exceptions.ErrorMessages;
 import co.com.constructores.model.order.Order;
 import co.com.constructores.model.order.gateways.OrderRepository;
 import co.com.constructores.model.solicitude.Solicitude;
+import co.com.constructores.usecase.constructionmap.ConstructionMapUseCase;
 import co.com.constructores.usecase.constructiontypes.ConstructionTypesUseCase;
 import co.com.constructores.usecase.materialwarehouse.MaterialWarehouseUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,7 @@ import java.time.LocalDate;
 public class OrdersUseCase {
     private final MaterialWarehouseUseCase materialWarehouseUseCase;
     private final ConstructionTypesUseCase constructionTypesUseCase;
-
-    private final ConstructionMapRepository constructionMapRepository;
+    private final ConstructionMapUseCase constructionMapUseCase;
     private final OrderRepository orderRepository;
 
     private static final int ONE_DAY = 1;
@@ -31,7 +30,7 @@ public class OrdersUseCase {
 
         return constructionTypeMono.flatMap(constructionType -> materialWarehouseUseCase.getMaterials()
                 .flatMap(material -> validateAvailableMaterials(material, constructionType)
-                        .flatMap(remainingMaterial -> constructionMapRepository.addConstruction(solicitude.getCoordX(), solicitude.getCoordY(), solicitude.getConstructionType())
+                        .flatMap(remainingMaterial -> constructionMapUseCase.addConstruction(solicitude.getCoordX(), solicitude.getCoordY(), solicitude.getConstructionType())
                                 .switchIfEmpty(Mono.error(new BusinessException(ErrorMessages.OCCUPIED_COORDINATES, ErrorCode.OCCUPIED_COORDS)))
                                 .flatMap(r -> createOrder(constructionType).flatMap(order -> materialWarehouseUseCase.saveMaterials(remainingMaterial).thenReturn(order)))
                         )

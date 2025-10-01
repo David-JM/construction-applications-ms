@@ -1,8 +1,10 @@
 package co.com.constructores.api;
 
 import co.com.constructores.api.config.ErrorHandler;
+import co.com.constructores.model.constructionmap.ConstructionMap;
 import co.com.constructores.model.constructiontype.ConstructionType;
 import co.com.constructores.model.solicitude.Solicitude;
+import co.com.constructores.usecase.constructionmap.ConstructionMapUseCase;
 import co.com.constructores.usecase.constructionreports.ConstructionReportsUseCase;
 import co.com.constructores.usecase.constructiontypes.ConstructionTypesUseCase;
 import co.com.constructores.usecase.orders.OrdersUseCase;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class Handler {
     private final OrdersUseCase ordersUseCase;
+    private final ConstructionMapUseCase constructionMapUseCase;
     private final ConstructionTypesUseCase constructionTypesUseCase;
     private final ConstructionReportsUseCase constructionReportsUseCase;
 
@@ -26,6 +29,10 @@ public class Handler {
                 .flatMap(ordersUseCase::addConstructionOrder)
                 .flatMap(result -> ServerResponse.ok().bodyValue(result))
                 .onErrorResume(ErrorHandler.businessError());
+    }
+
+    public Mono<ServerResponse> listenGETConstructionMapUseCase(ServerRequest serverRequest) {
+        return ServerResponse.ok().body(constructionMapUseCase.findAllConstruccions(), ConstructionMap.class);
     }
 
     public Mono<ServerResponse> listenGETConstructionTypesUseCase(ServerRequest serverRequest) {

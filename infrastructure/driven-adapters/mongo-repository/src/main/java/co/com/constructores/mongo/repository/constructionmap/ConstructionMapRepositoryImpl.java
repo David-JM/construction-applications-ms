@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -26,6 +27,11 @@ public class ConstructionMapRepositoryImpl implements ConstructionMapRepository 
         Update update = new Update().set(fieldPath, constructionType);
 
         return mongoTemplate.findAndModify(query, update, ConstructionMapDocument.class).map(this::toEntity);
+    }
+
+    @Override
+    public Flux<ConstructionMap> findAllConstruccions() {
+        return mongoTemplate.findAll(ConstructionMapDocument.class).map(this::toEntity);
     }
 
     private ConstructionMap toEntity(ConstructionMapDocument data) {
