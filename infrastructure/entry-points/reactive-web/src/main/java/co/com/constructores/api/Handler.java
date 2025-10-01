@@ -2,11 +2,13 @@ package co.com.constructores.api;
 
 import co.com.constructores.api.config.ErrorHandler;
 import co.com.constructores.model.constructionmap.ConstructionMap;
+import co.com.constructores.model.constructionmaterial.MaterialWarehouse;
 import co.com.constructores.model.constructiontype.ConstructionType;
 import co.com.constructores.model.solicitude.Solicitude;
 import co.com.constructores.usecase.constructionmap.ConstructionMapUseCase;
 import co.com.constructores.usecase.constructionreports.ConstructionReportsUseCase;
 import co.com.constructores.usecase.constructiontypes.ConstructionTypesUseCase;
+import co.com.constructores.usecase.materialwarehouse.MaterialWarehouseUseCase;
 import co.com.constructores.usecase.orders.OrdersUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 public class Handler {
     private final OrdersUseCase ordersUseCase;
     private final ConstructionMapUseCase constructionMapUseCase;
+    private final MaterialWarehouseUseCase materialWarehouseUseCase;
     private final ConstructionTypesUseCase constructionTypesUseCase;
     private final ConstructionReportsUseCase constructionReportsUseCase;
 
@@ -33,6 +36,10 @@ public class Handler {
 
     public Mono<ServerResponse> listenGETConstructionMapUseCase(ServerRequest serverRequest) {
         return ServerResponse.ok().body(constructionMapUseCase.findAllConstruccions(), ConstructionMap.class);
+    }
+
+    public Mono<ServerResponse> listenGETMaterialWarehouseUseCase(ServerRequest serverRequest) {
+        return ServerResponse.ok().body(materialWarehouseUseCase.getMaterials(), MaterialWarehouse.class);
     }
 
     public Mono<ServerResponse> listenGETConstructionTypesUseCase(ServerRequest serverRequest) {
